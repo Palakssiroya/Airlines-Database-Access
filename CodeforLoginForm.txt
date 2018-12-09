@@ -1,0 +1,23 @@
+Option Compare Database
+Dim rs As New ADODB.Recordset
+Dim cn As New ADODB.Connection
+Dim sql As String
+
+Private Sub Command10_Click()
+    If cn.State = adStateOpen Then cn.Close
+    Set cn = CurrentProject.AccessConnection
+    sql = "select * from Passengers Where EmailID= '" & txtEmailID.Value & "' And Password= '" & txtPassword.Value _
+    & "' order by PID"
+    If rs.State = adStateOpen Then rs.Close
+    With rs
+        .CursorLocation = adUseClient
+        .CursorType = adOpenDynamic
+        .LockType = adLockOptimistic
+        .Open sql, cn, , , adCmdText
+    End With
+    If Not rs.EOF Then
+        MsgBox " Welcome " & txtEmailID.Value
+    Else
+        MsgBox "Please Try Again"
+    End If
+End Sub
